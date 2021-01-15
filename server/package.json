@@ -8,6 +8,13 @@
     "test": "jest --watchAll --no-cache",
     "build": "tsc --project ./"
   },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/test/setup.ts"
+    ]
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -28,6 +35,7 @@
     "@types/node": "^14.14.21",
     "@types/supertest": "^2.0.10",
     "jest": "^26.6.3",
+    "mongodb-memory-server": "^6.9.3",
     "nodemon": "^2.0.7",
     "supertest": "^6.1.0",
     "ts-jest": "^26.4.4",
