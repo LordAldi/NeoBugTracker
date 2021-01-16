@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
 import { PasswordManager } from "../services/passwordManager";
+import Joi from "joi";
 
 // An Interface that describes the properties
 //that required to create new User
 interface UserAttrs {
   email: string;
   password: string;
+  role: string;
 }
 
 //an interface taht describe the properties
@@ -20,6 +22,7 @@ interface UserModel extends mongoose.Model<UserDoc> {
 interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
+  role: string;
   //   updatedAt:string
 }
 const userSchema = new mongoose.Schema(
@@ -31,6 +34,12 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+    },
+    role: {
+      type: String,
+      required: true,
+      enum: ["none", "submitter", "developer", "projectManager", "admin"],
+      default: "none",
     },
   },
   {
@@ -58,5 +67,35 @@ userSchema.statics.build = (attrs: UserAttrs) => {
 };
 
 const User = mongoose.model<UserDoc, UserModel>("User", userSchema);
+const validateUser = (user: Object) => {
+  const schema = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).required(),
+    role: Joi.string().valid(
+      "none",
+      "submitter",
+      "developer",
+      "projectManager",
+      "admin"
+    ).required,
+  });
 
-export { User };
+  return schema.validate({ ...user });
+};
+const validateUpdateUser = (user: Object) => {
+  const schema = Joi.object({
+    email: Joi.string().email(),
+    password: Joi.string().min(8),
+    role: Joi.string().valid(
+      "none",
+      "submitter",
+      "developer",
+      "projectManager",
+      "admin"
+    ),
+  });
+
+  return schema.validate({ ...user });
+};
+
+export { User, validateUser, validateUpdateUser };
