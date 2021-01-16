@@ -1,0 +1,14 @@
+{
+  "folders": [
+	{
+		"path": "."
+	},
+	{
+		"path": "..\\..\\bug-tracker\\bug-tracker-backend"
+	},
+	{
+		"path": "..\\..\\multiservice\\Ticketing"
+	}
+],
+  "settings": {}
+}
