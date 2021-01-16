@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { BadRequestError } from "../errors/bad-request-error";
-import { RequestValidationError } from "../errors/request-validation-error";
-import { User, validateUpdateUser } from "../models/user";
-import { PasswordManager } from "../services/passwordManager";
+import { BadRequestError } from "../../errors/bad-request-error";
+import { RequestValidationError } from "../../errors/request-validation-error";
+import { User, validateUpdateUser } from "../../models/user";
+import { PasswordManager } from "../../services/passwordManager";
 require("dotenv").config();
 
 const router = express.Router();
@@ -11,6 +11,7 @@ const router = express.Router();
 router.post("/api/users/signin", async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const existingUser = await User.findOne({ email });
+
   if (!existingUser) {
     throw new BadRequestError("Invalid credentials");
   }
@@ -32,6 +33,7 @@ router.post("/api/users/signin", async (req: Request, res: Response) => {
     {
       id: existingUser.id,
       email: existingUser.email,
+      role: existingUser.role,
     },
     process.env.JWT_KEY!
   );

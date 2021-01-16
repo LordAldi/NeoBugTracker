@@ -80,7 +80,7 @@ const validateUser = (user: Object) => {
     ).required,
   });
 
-  return schema.validate({ ...user });
+  return schema.validate(user);
 };
 const validateUpdateUser = (user: Object) => {
   const schema = Joi.object({
@@ -95,7 +95,14 @@ const validateUpdateUser = (user: Object) => {
     ),
   });
 
-  return schema.validate({ ...user });
+  return schema.validate(user);
 };
 
-export { User, validateUser, validateUpdateUser };
+export {
+  User,
+  validateUser,
+  validateUpdateUser,
+  userSchema,
+  UserDoc,
+  UserAttrs,
+};

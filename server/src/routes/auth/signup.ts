@@ -1,11 +1,9 @@
 import express, { Request, Response } from "express";
-import { body } from "express-validator";
 import jwt from "jsonwebtoken";
-import { BadRequestError } from "../errors/bad-request-error";
-import { RequestValidationError } from "../errors/request-validation-error";
-import { validateRequest } from "../middlewares/validate-request";
+import { BadRequestError } from "../../errors/bad-request-error";
+import { RequestValidationError } from "../../errors/request-validation-error";
 
-import { User, validateUser } from "../models/user";
+import { User, validateUser } from "../../models/user";
 // import { validateRequest, BadRequestError } from "@anuisme/common-ticket";
 require("dotenv").config();
 
@@ -32,6 +30,7 @@ router.post("/api/users/signup", async (req: Request, res: Response) => {
     {
       id: user.id,
       email: user.email,
+      role: user.role,
     },
     process.env.JWT_KEY!
   );

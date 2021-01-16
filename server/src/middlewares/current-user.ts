@@ -5,6 +5,7 @@ require("dotenv").config();
 interface UserPayload {
   id: string;
   email: string;
+  role: string;
 }
 
 //modify existing interface or addnew properties

@@ -1,5 +1,5 @@
 import request from "supertest";
-import { app } from "../../app";
+import { app } from "../../../app";
 
 it("clears the cookie after singing out", async () => {
   await request(app)
