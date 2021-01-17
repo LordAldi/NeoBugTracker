@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { PasswordManager } from "../services/passwordManager";
 import Joi from "joi";
+import { Role } from "../services/enums";
 
 // An Interface that describes the properties
 //that required to create new User
@@ -38,8 +39,14 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       required: true,
-      enum: ["none", "submitter", "developer", "projectManager", "admin"],
-      default: "none",
+      enum: [
+        Role.none,
+        Role.submitter,
+        Role.developer,
+        Role.projectManager,
+        Role.admin,
+      ],
+      default: Role.none,
     },
   },
   {
@@ -72,11 +79,11 @@ const validateUser = (user: Object) => {
     email: Joi.string().email().required(),
     password: Joi.string().min(8).required(),
     role: Joi.string().valid(
-      "none",
-      "submitter",
-      "developer",
-      "projectManager",
-      "admin"
+      Role.none,
+      Role.submitter,
+      Role.developer,
+      Role.projectManager,
+      Role.admin
     ).required,
   });
 
@@ -87,11 +94,11 @@ const validateUpdateUser = (user: Object) => {
     email: Joi.string().email(),
     password: Joi.string().min(8),
     role: Joi.string().valid(
-      "none",
-      "submitter",
-      "developer",
-      "projectManager",
-      "admin"
+      Role.none,
+      Role.submitter,
+      Role.developer,
+      Role.projectManager,
+      Role.admin
     ),
   });
 
