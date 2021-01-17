@@ -11,6 +11,7 @@ import { NotFoundError } from "./errors/not-found-error";
 import { currentUser } from "./middlewares/current-user";
 import { newProjectRouter } from "./routes/projects/new";
 import { getProjectRouter } from "./routes/projects/get";
+import { getOneProjectRouter } from "./routes/projects/getOne";
 
 const app = express();
 app.set("trust proxy", true);
@@ -28,6 +29,7 @@ app.use(signoutRouter);
 app.use(signupRouter);
 app.use(newProjectRouter);
 app.use(getProjectRouter);
+app.use(getOneProjectRouter);
 app.all("*", async (req, res, next) => {
   throw new NotFoundError();
 });

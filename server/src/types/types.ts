@@ -8,4 +8,6 @@ export interface Request<
   ReqBody = any,
   ReqQuery = Query,
   URLParams extends Params = core.ParamsDictionary
-> extends express.Request<URLParams, any, ReqBody, ReqQuery> {}
+> extends express.Request<URLParams, any, ReqBody, ReqQuery> {
+  currentUser?: any;
+}

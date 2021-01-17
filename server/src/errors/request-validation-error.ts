@@ -1,4 +1,3 @@
-import { ValidationError } from "express-validator";
 import { ValidationErrorItem } from "joi";
 import { CustomError } from "./custom-error";
 

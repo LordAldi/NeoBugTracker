@@ -1,8 +1,9 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import { NotAuthorizedError } from "../errors/not-authorized-error";
+import { Params, Query, Request } from "../types/types";
 
 export const requireAuth = (
-  req: Request,
+  req: Request<RequestBody, RequestQuery, RequestParams>,
   res: Response,
   next: NextFunction
 ) => {
@@ -11,3 +12,9 @@ export const requireAuth = (
   }
   next();
 };
+
+interface RequestBody {}
+
+interface RequestQuery extends Query {}
+
+interface RequestParams extends Params {}
