@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import "express-async-errors"; //IMPORTANT
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
@@ -14,6 +15,8 @@ import { getProjectRouter } from "./routes/projects/get";
 import { getOneProjectRouter } from "./routes/projects/getOne";
 
 const app = express();
+app.use(cors());
+
 app.set("trust proxy", true);
 app.use(json());
 app.use(

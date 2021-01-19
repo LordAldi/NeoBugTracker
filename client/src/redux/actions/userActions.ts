@@ -8,8 +8,11 @@ import {
   LOADING_UI,
 } from "../types";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
-export const loginUser = (userData: loginProps) => async (dispatch: any) => {
+export const loginUser = (userData: loginProps, redirect: Function) => async (
+  dispatch: any
+) => {
   dispatch({ type: LOADING_UI });
   try {
     const res = await axios.post("/api/users/signin", {
@@ -20,11 +23,11 @@ export const loginUser = (userData: loginProps) => async (dispatch: any) => {
 
     dispatch(await getUserData());
     dispatch({ type: CLEAR_ERRORS });
-    console.log();
+    redirect();
   } catch (error) {
     dispatch({
       type: SET_ERRORS,
-      payload: error,
+      payload: error.response.data.errors,
     });
   }
 };
