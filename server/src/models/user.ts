@@ -7,6 +7,8 @@ import { Role } from "../services/enums";
 //that required to create new User
 interface UserAttrs {
   email: string;
+  firstName: string;
+  lastName: string;
   password: string;
   role: string;
 }
@@ -24,6 +26,8 @@ interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
   role: string;
+  firstName: string;
+  lastName: string;
   //   updatedAt:string
 }
 const userSchema = new mongoose.Schema(
@@ -33,6 +37,14 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     password: {
+      type: String,
+      required: true,
+    },
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
       type: String,
       required: true,
     },
@@ -78,6 +90,8 @@ const validateUser = (user: Object) => {
   const schema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().min(8).required(),
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
     role: Joi.string().valid(
       Role.none,
       Role.submitter,

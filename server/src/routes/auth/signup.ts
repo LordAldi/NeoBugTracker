@@ -10,7 +10,7 @@ require("dotenv").config();
 const router = express.Router();
 
 router.post("/api/users/signup", async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password, firstName, lastName } = req.body;
 
   const existingUser = await User.findOne({ email });
   if (existingUser) {
@@ -22,7 +22,13 @@ router.post("/api/users/signup", async (req: Request, res: Response) => {
     throw new RequestValidationError(error.details);
   }
 
-  const user = User.build({ email, password, role: "none" });
+  const user = User.build({
+    email,
+    password,
+    role: "none",
+    firstName,
+    lastName,
+  });
   await user.save();
 
   //generateJWT
@@ -31,6 +37,8 @@ router.post("/api/users/signup", async (req: Request, res: Response) => {
       id: user.id,
       email: user.email,
       role: user.role,
+      firstName: user.firstName,
+      lastName: user.lastName,
     },
     process.env.JWT_KEY!
   );

@@ -19,7 +19,9 @@ app.use(json());
 app.use(
   cookieSession({
     signed: false,
-    // secure: process.env.NODE_ENV !== "test",
+    sameSite: false,
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
   })
 );
 app.use(currentUser);

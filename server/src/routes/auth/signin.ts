@@ -34,6 +34,8 @@ router.post("/api/users/signin", async (req: Request, res: Response) => {
       id: existingUser.id,
       email: existingUser.email,
       role: existingUser.role,
+      firstName: existingUser.firstName,
+      lastName: existingUser.lastName,
     },
     process.env.JWT_KEY!
   );
