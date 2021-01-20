@@ -1,8 +1,6 @@
-import { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-// import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
@@ -73,7 +71,7 @@ const Signin = ({ user, UI, loginUser }: SinginProps) => {
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={SigninSchema}
-          onSubmit={async (values: any) => {
+          onSubmit={async (values: loginProps) => {
             console.log("masuk");
 
             const { email, password } = values;
@@ -142,7 +140,7 @@ const Signin = ({ user, UI, loginUser }: SinginProps) => {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/signup" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
