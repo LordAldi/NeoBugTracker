@@ -6,32 +6,49 @@ import {
   CLEAR_ERRORS,
   SET_ERRORS,
   LOADING_UI,
+  REMOVE_LOADING_USER,
 } from "../types";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
-export const loginUser = (userData: loginProps, redirect: Function) => async (
+export const loginUser = (userData: loginProps, redirect: Function) => (
   dispatch: any
 ) => {
   console.log("login");
 
   dispatch({ type: LOADING_UI });
-  try {
-    const res = await axios.post("/api/users/signin", {
+  axios
+    .post("/api/users/signin", {
       email: userData.email,
       password: userData.password,
+    })
+    .then(async (res) => {
+      sessionStorage.setItem("email", userData.email);
+      await dispatch(getUserData());
+      dispatch({ type: CLEAR_ERRORS });
+      redirect();
+    })
+    .catch((err) => {
+      dispatch({
+        type: SET_ERRORS,
+        payload: err.response.data.errors,
+      });
     });
-    console.log(res);
-
-    dispatch(await getUserData());
-    dispatch({ type: CLEAR_ERRORS });
-    redirect();
-  } catch (error) {
-    dispatch({
-      type: SET_ERRORS,
-      payload: error.response.data.errors,
-    });
-  }
+  // try {
+  //   const res = await axios.post("/api/users/signin", {
+  //     email: userData.email,
+  //     password: userData.password,
+  //   });
+  // sessionStorage.setItem("email", userData.email);
+  // dispatch(await getUserData());
+  // dispatch({ type: CLEAR_ERRORS });
+  // redirect();
+  // } catch (error) {
+  // dispatch({
+  //   type: SET_ERRORS,
+  //   payload: error.response.data.errors,
+  // });
+  // }
 };
 export const signupUser = (userData: signupProps, redirect: Function) => async (
   dispatch: any
@@ -44,6 +61,7 @@ export const signupUser = (userData: signupProps, redirect: Function) => async (
       firstName: userData.firstName,
       lastName: userData.lastName,
     });
+    sessionStorage.setItem("email", userData.email);
 
     dispatch(await getUserData());
     dispatch({ type: CLEAR_ERRORS });
@@ -54,6 +72,13 @@ export const signupUser = (userData: signupProps, redirect: Function) => async (
       payload: error.response.data.errors,
     });
   }
+};
+
+export const logoutUser = () => (dispatch: any) => {
+  axios.post("/api/users/signout").then((res) => {
+    sessionStorage.removeItem("email");
+    dispatch({ type: SET_UNAUTHENTICATED });
+  });
 };
 export const currentuser = () => async (dispatch: any) => {
   console.log("current user");
@@ -69,21 +94,32 @@ export const currentuser = () => async (dispatch: any) => {
     });
   }
 };
-export const getUserData = async () => async (dispatch: any) => {
+export const getUserData = () => (dispatch: any) => {
   dispatch({ type: LOADING_USER });
-  try {
-    console.log("masukcekuser");
-
-    const { data } = await axios.get("/api/users/currentuser");
-    console.log(data);
-
-    dispatch({
-      type: SET_USER,
-      payload: { ...data },
+  axios
+    .get("/api/users/currentuser")
+    .then((res) => {
+      dispatch({
+        type: SET_USER,
+        payload: { ...res.data },
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  } catch (error) {
-    console.log(error);
-  }
+  // try {
+  //   console.log("masukcekuser");
+
+  //   const { data } = await axios.get("/api/users/currentuser");
+  //   console.log(data);
+
+  //   dispatch({
+  //     type: SET_USER,
+  //     payload: { ...data },
+  //   });
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
 
 export type loginProps = {

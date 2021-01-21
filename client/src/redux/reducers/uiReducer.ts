@@ -5,13 +5,19 @@ import {
   STOP_LOADING_UI,
 } from "../types";
 
+export interface IUIState {
+  loading: boolean;
+  errors: any;
+  openDialog: boolean;
+}
 const initialState = {
   loading: false,
   errors: null,
   openDialog: false,
 };
+type Action = { type: string; payload?: any };
 
-export default function (state = initialState, action: Action) {
+export default function (state: IUIState = initialState, action: Action) {
   switch (action.type) {
     case SET_ERRORS:
       return {
@@ -39,8 +45,3 @@ export default function (state = initialState, action: Action) {
       return state;
   }
 }
-
-type Action = {
-  type: string;
-  payload: any;
-};

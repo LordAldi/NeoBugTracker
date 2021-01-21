@@ -1,3 +1,4 @@
+import React from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -40,21 +41,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type SinginProps = {
+interface ISinginProps {
   user: any;
   UI: any;
   loginUser: any;
-};
-type ErrorSingin = {
+}
+interface IErrorSingin {
   message: string;
   field?: string;
-};
+}
 const SigninSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
   password: Yup.string().min(8, "password too short"),
 });
 
-const Signin = ({ user, UI, loginUser }: SinginProps) => {
+const Signin: React.FC<ISinginProps> = ({
+  user,
+  UI,
+  loginUser,
+}): JSX.Element => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -71,9 +76,7 @@ const Signin = ({ user, UI, loginUser }: SinginProps) => {
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={SigninSchema}
-          onSubmit={async (values: loginProps) => {
-            console.log("masuk");
-
+          onSubmit={async (values: loginProps): Promise<void> => {
             const { email, password } = values;
             try {
               const userData: loginProps = {
@@ -91,7 +94,7 @@ const Signin = ({ user, UI, loginUser }: SinginProps) => {
           {({ isSubmitting }) => (
             <Form className={classes.form}>
               {UI.errors &&
-                UI.errors.map((err: ErrorSingin) => {
+                UI.errors.map((err: IErrorSingin) => {
                   return <Alert severity="error">{err.message}</Alert>;
                 })}
               {UI.loading && <LinearProgress />}

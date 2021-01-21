@@ -3,6 +3,7 @@ import {
   SET_AUTHENTICATED,
   SET_UNAUTHENTICATED,
   LOADING_USER,
+  REMOVE_LOADING_USER,
 } from "../types";
 
 const initialState = {
@@ -30,6 +31,11 @@ export default function (state = initialState, action: Action) {
       return {
         ...state,
         loading: true,
+      };
+    case REMOVE_LOADING_USER:
+      return {
+        ...state,
+        loading: false,
       };
     default:
       return state;
