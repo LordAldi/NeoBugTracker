@@ -2,6 +2,7 @@ import { Box, Container, Grid, makeStyles, Paper } from "@material-ui/core";
 import React from "react";
 import clsx from "clsx";
 import Copyright from "../components/Copyright";
+import TableProject from "../components/table/project/TableProject";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +29,7 @@ const Home = () => {
   return (
     <Grid container spacing={3}>
       {/* Chart */}
+      <TableProject />
       <Grid item xs={12} md={8} lg={9}>
         <Paper className={fixedHeightPaper}>{/* <Chart /> */}</Paper>
       </Grid>

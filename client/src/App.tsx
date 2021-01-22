@@ -41,10 +41,8 @@ axios.defaults.baseURL = process.env.API_URI;
 if (Cookies.get("express:sess")) {
   store.dispatch({ type: SET_AUTHENTICATED });
   store.dispatch(getUserData() as any);
-  console.log("masuodd");
 } else {
   store.dispatch(logoutUser() as any);
-  console.log(Cookies.get("express:sess"));
 }
 
 function App({ user, UI, logoutUser, currentuser }: any) {

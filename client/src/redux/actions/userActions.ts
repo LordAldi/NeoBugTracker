@@ -14,8 +14,6 @@ import { useHistory } from "react-router-dom";
 export const loginUser = (userData: loginProps, redirect: Function) => (
   dispatch: any
 ) => {
-  console.log("login");
-
   dispatch({ type: LOADING_UI });
   axios
     .post("/api/users/signin", {
@@ -81,8 +79,6 @@ export const logoutUser = () => (dispatch: any) => {
   });
 };
 export const currentuser = () => async (dispatch: any) => {
-  console.log("current user");
-
   dispatch({ type: LOADING_UI });
   try {
     dispatch(await getUserData());

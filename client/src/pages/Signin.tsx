@@ -63,7 +63,6 @@ const Signin: React.FC<ISinginProps> = ({
 }): JSX.Element => {
   const classes = useStyles();
   const history = useHistory();
-  console.log(Cookies.get("express:sess"));
 
   return (
     <Container component="main" maxWidth="xs">

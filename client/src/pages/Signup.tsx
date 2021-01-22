@@ -79,8 +79,6 @@ const SignUp = ({ user, UI, signupUser }: SignupProps) => {
           }}
           validationSchema={SignUpSchema}
           onSubmit={async (values: signupProps) => {
-            console.log("masuk");
-
             const { email, password, firstName, lastName } = values;
             try {
               const userData: signupProps = {
