@@ -12,18 +12,24 @@ import { MuiThemeProvider } from "@material-ui/core/styles";
 //axios
 import axios from "axios";
 //
-import Dashboard from "./pages/Dashboard";
+import Home from "./pages/Home";
 //
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import store from "./redux/store";
 import { connect, Provider } from "react-redux";
 import { SET_AUTHENTICATED } from "./redux/types";
-import { currentuser, logoutUser } from "./redux/actions/userActions";
+import {
+  currentuser,
+  getUserData,
+  logoutUser,
+} from "./redux/actions/userActions";
 import SecureRoute from "./components/utils/SecureRoute";
 import AuthRoute from "./components/utils/AuthRoute";
 import { useEffect } from "react";
-
+import Cookies from "js-cookie";
+import Test from "./pages/Test";
+import Dashboard from "./components/Dashboard";
 if (!process.env.REACT_APP_API_URI) {
   throw new Error("REACT_APP_API_URI MUST DEFINE");
 }
@@ -31,56 +37,29 @@ if (!process.env.REACT_APP_API_URI) {
 const theme = createMuiTheme(themeFile);
 
 axios.defaults.baseURL = process.env.API_URI;
-const RedirectSignin: React.FunctionComponent = () => (
-  <>
-    <Redirect to="/signin" />
-  </>
-);
-const RedirectDashboard: React.FunctionComponent = () => (
-  <>
-    <Redirect to="/" />
-  </>
-);
+
+if (Cookies.get("express:sess")) {
+  store.dispatch({ type: SET_AUTHENTICATED });
+  store.dispatch(getUserData() as any);
+  console.log("masuodd");
+} else {
+  store.dispatch(logoutUser() as any);
+  console.log(Cookies.get("express:sess"));
+}
+
 function App({ user, UI, logoutUser, currentuser }: any) {
-  const [router, setrouter] = useState(
-    <Switch>
-      <Route exact path="/signin" component={Signin} />
-      <Route exact path="/signup" component={Signup} />
-      <Route path="/" component={RedirectSignin} />
-    </Switch>
-  );
-  useEffect(() => {
-    // const email: string = sessionStorage.email;
-    // console.log(email);
-    // if (email) {
-    //   store.dispatch({ type: SET_AUTHENTICATED });
-    //   store.dispatch(getUserData() as any);
-    // } else {
-    //   store.dispatch(logoutUser() as any);
-    // }
-    const fetchdata = async () => {
-      await currentuser();
-      if (user.currentUser) {
-        setrouter(
-          <Switch>
-            <Route exact path="/" component={Dashboard} />
-            <Route path="/" component={RedirectDashboard} />
-          </Switch>
-        );
-      }
-    };
-    fetchdata();
-    // window.location.href = "/";
-  }, [user.authenticated]);
   return (
     <MuiThemeProvider theme={theme}>
       <Router>
-        <Switch>
-          {router}
-          {/* <SecureRoute exact path="/" component={Dashboard} />
-          <AuthRoute exact path="/signin" component={Signin} />
-          <AuthRoute exact path="/signup" component={Signup} /> */}
-        </Switch>
+        <Dashboard>
+          <Switch>
+            <SecureRoute exact path="/" component={Home} />
+            <SecureRoute exact path="/test" component={Test} />
+            <AuthRoute exact path="/signin" component={Signin} />
+            <AuthRoute exact path="/signup" component={Signup} />
+            {/* <Route path="/" component={RedirectSignin} /> */}
+          </Switch>
+        </Dashboard>
       </Router>
     </MuiThemeProvider>
   );

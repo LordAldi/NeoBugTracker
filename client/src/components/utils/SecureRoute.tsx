@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import Dashboard from "../Dashboard";
 // import PropTypes from 'prop-types'
 
 const SecureRoute = ({ component: Component, authenticated, ...rest }: any) => (

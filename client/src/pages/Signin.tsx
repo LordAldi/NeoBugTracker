@@ -11,7 +11,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Copyright from "../components/utils/Copyright";
+import Copyright from "../components/Copyright";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { loginUser, loginProps } from "../redux/actions/userActions";
@@ -20,6 +20,7 @@ import { TextField } from "formik-material-ui";
 import * as Yup from "yup";
 import { LinearProgress } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
+import Cookies from "js-cookie";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -62,6 +63,7 @@ const Signin: React.FC<ISinginProps> = ({
 }): JSX.Element => {
   const classes = useStyles();
   const history = useHistory();
+  console.log(Cookies.get("express:sess"));
 
   return (
     <Container component="main" maxWidth="xs">
