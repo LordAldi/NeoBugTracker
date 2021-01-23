@@ -4,6 +4,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TablePagination from "@material-ui/core/TablePagination";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -21,8 +22,12 @@ import {
 import TableProjectToolbar from "./TableProjectToolbar";
 import TableProjectHead from "./TableProjectHead";
 import axios from "axios";
+import { getProjects } from "../../../redux/actions/projectActions";
+import { connect, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+
 // import { ServerUsersData } from "./utils";
-// const rows = [
+// const projects = [
 //   createData(
 //     "new Project",
 //     "this is project we are looking for",
@@ -44,8 +49,15 @@ import axios from "axios";
 //     "maret 29300"
 //   ),
 // ];
-
-export default function TableProject() {
+interface ITableProjectProps {
+  Project: {
+    projects: any[];
+    loading: boolean;
+  };
+}
+const TableProject: React.FC<ITableProjectProps> = ({
+  Project,
+}): JSX.Element => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("name");
@@ -53,34 +65,17 @@ export default function TableProject() {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [rows, setRows] = React.useState<Data[]>([]);
+  // const [rows, setRows] = React.useState<Data[]>([]);
+  const history = useHistory();
+  const { projects, loading } = Project;
+  const dispatch = useDispatch();
   useEffect(() => {
-    const Fetchdata = async () => {
-      const res = await axios
-        .get("/api/projects")
-        .then((res) => {
-          res.data.forEach((user: ServerUsersData, index: number) => {
-            setRows((rows) => [
-              ...rows,
-              createData(
-                user.name,
-                user.description,
-                user.createdBy,
-                user.modifiedBy,
-                user.created,
-                user.modified
-              ),
-            ]);
-            console.log(rows);
-          });
-        })
-        .catch((err) => {
-          console.log();
-        });
+    const fetchProjects = () => {
+      dispatch(getProjects());
     };
-
-    Fetchdata();
+    fetchProjects();
   }, []);
+  console.log(projects);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -93,31 +88,32 @@ export default function TableProject() {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = projects.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected: string[] = [];
+  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
+    // const selectedIndex = selected.indexOf(name);
+    // let newSelected: string[] = [];
+    console.log(id);
+    history.push(`/project/${id}`);
+    // if (selectedIndex === -1) {
+    //   newSelected = newSelected.concat(selected, name);
+    // } else if (selectedIndex === 0) {
+    //   newSelected = newSelected.concat(selected.slice(1));
+    // } else if (selectedIndex === selected.length - 1) {
+    //   newSelected = newSelected.concat(selected.slice(0, -1));
+    // } else if (selectedIndex > 0) {
+    //   newSelected = newSelected.concat(
+    //     selected.slice(0, selectedIndex),
+    //     selected.slice(selectedIndex + 1)
+    //   );
+    // }
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
+    // setSelected(newSelected);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -138,7 +134,45 @@ export default function TableProject() {
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, projects.length - page * rowsPerPage);
+
+  let projectMarkup = !loading ? (
+    stableSort(projects, getComparator(order, orderBy))
+      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+      .map((project: any, index) => {
+        const isItemSelected = isSelected(project.name);
+        const labelId = `enhanced-table-checkbox-${index}`;
+        console.log("masulmaops oyy");
+
+        return (
+          <TableRow
+            hover
+            onClick={(event) => handleClick(event, project.id)}
+            role="checkbox"
+            // aria-checked={isItemSelected}
+            tabIndex={-1}
+            key={project.name}
+            // selected={isItemSelected}
+          >
+            {/* <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isItemSelected}
+                          inputProps={{ "aria-labelledby": labelId }}
+                        />
+                      </TableCell> */}
+
+            <TableCell align="left">{project.name}</TableCell>
+            <TableCell align="left">{project.description}</TableCell>
+            <TableCell align="left">{project.created}</TableCell>
+            <TableCell align="left">{project.createdBy}</TableCell>
+            <TableCell align="left">{project.modified}</TableCell>
+            <TableCell align="left">{project.modifiedBy}</TableCell>
+          </TableRow>
+        );
+      })
+  ) : (
+    <CircularProgress />
+  );
 
   return (
     <div className={classes.root}>
@@ -158,41 +192,10 @@ export default function TableProject() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={projects.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row: any, index) => {
-                  const isItemSelected = isSelected(row.name);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-
-                  return (
-                    <TableRow
-                      hover
-                      // onClick={(event) => handleClick(event, row.name)}
-                      role="checkbox"
-                      // aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.name}
-                      // selected={isItemSelected}
-                    >
-                      {/* <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ "aria-labelledby": labelId }}
-                        />
-                      </TableCell> */}
-
-                      <TableCell align="left">{row.name}</TableCell>
-                      <TableCell align="left">{row.description}</TableCell>
-                      <TableCell align="left">{row.created}</TableCell>
-                      <TableCell align="left">{row.createdBy}</TableCell>
-                      <TableCell align="left">{row.modified}</TableCell>
-                      <TableCell align="left">{row.modifiedBy}</TableCell>
-                    </TableRow>
-                  );
-                })}
+              {projectMarkup}
               {emptyRows > 0 && (
                 <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
                   <TableCell colSpan={6} />
@@ -204,7 +207,7 @@ export default function TableProject() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={projects.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
@@ -217,4 +220,10 @@ export default function TableProject() {
       />
     </div>
   );
-}
+};
+
+const mapStateToProps = (state: any) => ({
+  Project: state.Project,
+});
+
+export default connect(mapStateToProps)(TableProject);

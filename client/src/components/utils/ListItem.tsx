@@ -14,7 +14,7 @@ import ListSingleItem from "./ListSingleItem";
 export const mainListItems = (
   <div>
     <ListSingleItem icon={<DashboardIcon />} primary="Da" to="/" />
-    <ListSingleItem icon={<ShoppingCartIcon />} primary="Order" to="/test" />
+    <ListSingleItem icon={<ShoppingCartIcon />} primary="Order" to="/project" />
     <ListItem button>
       <ListItemIcon>
         <PeopleIcon />

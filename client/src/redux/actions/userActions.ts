@@ -9,7 +9,6 @@ import {
   REMOVE_LOADING_USER,
 } from "../types";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
 
 export const loginUser = (userData: loginProps, redirect: Function) => (
   dispatch: any
@@ -32,21 +31,6 @@ export const loginUser = (userData: loginProps, redirect: Function) => (
         payload: err.response.data.errors,
       });
     });
-  // try {
-  //   const res = await axios.post("/api/users/signin", {
-  //     email: userData.email,
-  //     password: userData.password,
-  //   });
-  // sessionStorage.setItem("email", userData.email);
-  // dispatch(await getUserData());
-  // dispatch({ type: CLEAR_ERRORS });
-  // redirect();
-  // } catch (error) {
-  // dispatch({
-  //   type: SET_ERRORS,
-  //   payload: error.response.data.errors,
-  // });
-  // }
 };
 export const signupUser = (userData: signupProps, redirect: Function) => async (
   dispatch: any

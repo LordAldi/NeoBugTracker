@@ -30,6 +30,8 @@ import { useEffect } from "react";
 import Cookies from "js-cookie";
 import Test from "./pages/Test";
 import Dashboard from "./components/Dashboard";
+import Project from "./pages/Project";
+import SingleProject from "./pages/SingleProject";
 if (!process.env.REACT_APP_API_URI) {
   throw new Error("REACT_APP_API_URI MUST DEFINE");
 }
@@ -52,7 +54,8 @@ function App({ user, UI, logoutUser, currentuser }: any) {
         <Dashboard>
           <Switch>
             <SecureRoute exact path="/" component={Home} />
-            <SecureRoute exact path="/test" component={Test} />
+            <SecureRoute exact path="/project" component={Project} />
+            <SecureRoute exact path="/project/:id" component={SingleProject} />
             <AuthRoute exact path="/signin" component={Signin} />
             <AuthRoute exact path="/signup" component={Signup} />
             {/* <Route path="/" component={RedirectSignin} /> */}

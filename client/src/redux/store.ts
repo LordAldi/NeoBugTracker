@@ -3,6 +3,7 @@ import thunk from "redux-thunk";
 import userReducer from "./reducers/userReducer";
 import { composeWithDevTools } from "redux-devtools-extension";
 import uiReducer, { IUIState } from "./reducers/uiReducer";
+import projectReducer from "./reducers/projectReducer";
 
 const initialState = {};
 const middleware = [thunk];
@@ -14,12 +15,12 @@ interface IReducer {
 const reducers = combineReducers({
   user: userReducer,
   UI: uiReducer,
+  Project: projectReducer,
 });
 
 const store = createStore(
   reducers,
-  initialState,
-  composeWithDevTools(applyMiddleware(...middleware))
+  composeWithDevTools(applyMiddleware(thunk))
 );
 
 export default store;

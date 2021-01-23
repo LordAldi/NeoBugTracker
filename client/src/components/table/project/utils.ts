@@ -72,6 +72,7 @@ export interface ServerUsersData {
   modifiedBy: UserData;
   created: string;
   modified: string;
+  id: string;
 }
 interface UserData {
   firstName: string;
@@ -87,6 +88,7 @@ export interface Data {
   modifiedBy: string;
   created: string;
   modified: string;
+  id: string;
 }
 export function createData(
   name: string,
@@ -94,7 +96,8 @@ export function createData(
   createdBy: UserData,
   modifiedBy: UserData,
   created: string,
-  modified: string
+  modified: string,
+  id: string
 ): Data {
   let cLastName: string;
   let cFirstName: string;
@@ -122,5 +125,6 @@ export function createData(
     createdBy: `${cFirstName} ${cLastName}`,
     modified,
     modifiedBy: `${mFirstName} ${mLastName}`,
+    id,
   };
 }
