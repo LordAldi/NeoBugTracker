@@ -4,6 +4,7 @@ import {
   CREATE_PROJECT,
   EDIT_PROJECT,
   LOADING_PROJECT,
+  CLEAR_ERRORS,
 } from "../types";
 
 import axios from "axios";
@@ -13,8 +14,6 @@ import {
 } from "../../components/table/project/utils";
 
 export const getProjects = () => (dispatch: any) => {
-  console.log("loll");
-
   dispatch({ type: LOADING_PROJECT });
   axios
     .get("/api/projects")
@@ -55,4 +54,15 @@ export const getProjects = () => (dispatch: any) => {
         payload: [],
       });
     });
+};
+
+export const getProject = (id: string) => (dispatch: any) => {
+  dispatch({ type: LOADING_PROJECT });
+  axios
+    .get(`/api/projects/${id}`)
+    .then((res) => {
+      dispatch({ type: SET_PROJECT, payload: res.data });
+      dispatch({ type: CLEAR_ERRORS });
+    })
+    .catch((err) => console.log(err));
 };
