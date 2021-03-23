@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -59,23 +59,23 @@ const TableProject: React.FC<ITableProjectProps> = ({
   Project,
 }): JSX.Element => {
   const classes = useStyles();
-  const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("name");
-  const [selected, setSelected] = React.useState<string[]>([]);
-  const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [order, setOrder] = useState<Order>("asc");
+  const [orderBy, setOrderBy] = useState<keyof Data>("name");
+  const [selected, setSelected] = useState<string[]>([]);
+  const [page, setPage] = useState(0);
+  const [dense, setDense] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   // const [rows, setRows] = React.useState<Data[]>([]);
   const history = useHistory();
   const { projects, loading } = Project;
   const dispatch = useDispatch();
+
   useEffect(() => {
     const fetchProjects = () => {
       dispatch(getProjects());
     };
     fetchProjects();
   }, []);
-  console.log(projects);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -96,24 +96,8 @@ const TableProject: React.FC<ITableProjectProps> = ({
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
-    // const selectedIndex = selected.indexOf(name);
-    // let newSelected: string[] = [];
     console.log(id);
     history.push(`/project/${id}`);
-    // if (selectedIndex === -1) {
-    //   newSelected = newSelected.concat(selected, name);
-    // } else if (selectedIndex === 0) {
-    //   newSelected = newSelected.concat(selected.slice(1));
-    // } else if (selectedIndex === selected.length - 1) {
-    //   newSelected = newSelected.concat(selected.slice(0, -1));
-    // } else if (selectedIndex > 0) {
-    //   newSelected = newSelected.concat(
-    //     selected.slice(0, selectedIndex),
-    //     selected.slice(selectedIndex + 1)
-    //   );
-    // }
-
-    // setSelected(newSelected);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -142,7 +126,6 @@ const TableProject: React.FC<ITableProjectProps> = ({
       .map((project: any, index) => {
         const isItemSelected = isSelected(project.name);
         const labelId = `enhanced-table-checkbox-${index}`;
-        console.log("masulmaops oyy");
 
         return (
           <TableRow
@@ -151,7 +134,7 @@ const TableProject: React.FC<ITableProjectProps> = ({
             role="checkbox"
             // aria-checked={isItemSelected}
             tabIndex={-1}
-            key={project.name}
+            key={project.id}
             // selected={isItemSelected}
           >
             {/* <TableCell padding="checkbox">
