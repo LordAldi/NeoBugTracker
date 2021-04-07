@@ -9,3 +9,9 @@ there 4 role
 - developer
 - project manager
 - admin
+
+server .env
+MONGO_URI=
+JWT_KEY=
+PORT=
+NODE_ENV=

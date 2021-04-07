@@ -13,6 +13,7 @@ import { currentUser } from "./middlewares/current-user";
 import { newProjectRouter } from "./routes/projects/new";
 import { getProjectRouter } from "./routes/projects/get";
 import { getOneProjectRouter } from "./routes/projects/getOne";
+import { updateProjectRouter } from "./routes/projects/update";
 
 const app = express();
 app.use(cors());
@@ -35,6 +36,7 @@ app.use(signupRouter);
 app.use(newProjectRouter);
 app.use(getProjectRouter);
 app.use(getOneProjectRouter);
+app.use(updateProjectRouter);
 app.all("*", async (req, res, next) => {
   throw new NotFoundError();
 });

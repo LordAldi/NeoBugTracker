@@ -24,7 +24,7 @@ interface ProjectModel extends mongoose.Model<ProjectDoc> {
 interface ProjectDoc extends mongoose.Document {
   name: string;
   description: string;
-  assignedTo: any;
+  assignedTo: any[];
   tickets: string[];
   created: number;
   createdBy: string;
@@ -32,7 +32,6 @@ interface ProjectDoc extends mongoose.Document {
   modifiedBy: string;
   isFinish: boolean;
 }
-
 const projectSchema = new mongoose.Schema(
   {
     name: {
