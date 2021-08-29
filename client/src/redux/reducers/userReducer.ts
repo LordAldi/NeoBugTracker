@@ -5,6 +5,15 @@ import {
   LOADING_USER,
   REMOVE_LOADING_USER,
 } from "../types";
+export interface IUserState {
+  authenticated: boolean;
+  loading: boolean;
+  credentials: any;
+}
+type Action = {
+  type: string;
+  payload?: any;
+};
 
 const initialState = {
   authenticated: false,
@@ -12,7 +21,10 @@ const initialState = {
   credentials: {},
 };
 
-export default function (state = initialState, action: Action) {
+export default function (
+  state: IUserState = initialState,
+  action: Action
+): IUserState {
   switch (action.type) {
     case SET_AUTHENTICATED:
       return {
@@ -41,8 +53,3 @@ export default function (state = initialState, action: Action) {
       return state;
   }
 }
-
-type Action = {
-  type: string;
-  payload: any;
-};

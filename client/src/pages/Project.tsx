@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import {
-  Box,
   Breadcrumbs,
-  Container,
   Grid,
   makeStyles,
   Paper,
@@ -11,12 +9,11 @@ import {
 import { DataGrid, GridColDef, GridCellParams } from "@material-ui/data-grid";
 import Link from "@material-ui/core/Link";
 import clsx from "clsx";
-import Copyright from "../components/Copyright";
-import TableProject from "../components/table/project/TableProject";
-import { useDispatch, connect } from "react-redux";
-import { getProjects } from "../redux/actions/projectActions";
+import { useSelector } from "react-redux";
 import CustomNoRowsOverlay from "../components/utils/CustomNoRowsOverlay";
 import { useHistory } from "react-router";
+import { IRootState } from "../redux/store";
+import { IProjectState } from "../redux/reducers/projectReducer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,16 +55,17 @@ const columns: GridColDef[] = [
   { field: "modified", headerName: "Modified At", width: 250 },
   { field: "modifiedBy", headerName: "Modified By", width: 200 },
 ];
-const Project: React.FC<IProjectProps> = ({ Project }): JSX.Element => {
+const Project: React.FC<IProjectProps> = (): JSX.Element => {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const { projects, loading } = Project;
+
   const history = useHistory();
-  const dispatch = useDispatch();
+  const Project: IProjectState = useSelector(
+    (state: IRootState) => state.Project
+  );
+  const { projects, loading } = Project;
   useEffect(() => {
-    const fetchProjects = () => {
-      dispatch(getProjects());
-    };
+    const fetchProjects = () => {};
     fetchProjects();
   }, []);
 
@@ -106,7 +104,5 @@ const Project: React.FC<IProjectProps> = ({ Project }): JSX.Element => {
     </Grid>
   );
 };
-const mapStateToProps = (state: any) => ({
-  Project: state.Project,
-});
-export default connect(mapStateToProps)(Project);
+
+export default Project;

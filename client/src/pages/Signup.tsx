@@ -11,7 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Copyright from "../components/Copyright";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { signupUser, signupProps } from "../redux/actions/userActions";
 import { Formik, Form, Field } from "formik";
@@ -19,6 +19,7 @@ import { TextField } from "formik-material-ui";
 import * as Yup from "yup";
 import { LinearProgress } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
+import { IRootState } from "../redux/store";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type SignupProps = {
-  user: any;
+  User: any;
   UI: any;
   signupUser: any;
 };
@@ -56,9 +57,11 @@ const SignUpSchema = Yup.object().shape({
   lastName: Yup.string().min(2, "password too short, minimum 2 character"),
 });
 
-const SignUp = ({ user, UI, signupUser }: SignupProps) => {
+const SignUp = () => {
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
+  const UI = useSelector((state: IRootState) => state.UI);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -87,9 +90,11 @@ const SignUp = ({ user, UI, signupUser }: SignupProps) => {
                 firstName,
                 lastName,
               };
-              signupUser(userData, () => {
-                history.push("/");
-              });
+              dispatch(
+                signupUser(userData, () => {
+                  history.push("/");
+                })
+              );
             } catch (error) {
               console.log(error);
             }
@@ -196,12 +201,4 @@ const SignUp = ({ user, UI, signupUser }: SignupProps) => {
   );
 };
 
-const mapStateToProps = (state: any) => ({
-  user: state.user,
-  UI: state.UI,
-});
-const mapActionsToProps = {
-  signupUser,
-};
-
-export default connect(mapStateToProps, mapActionsToProps)(SignUp);
+export default SignUp;

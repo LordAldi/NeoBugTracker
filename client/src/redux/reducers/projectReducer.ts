@@ -7,7 +7,7 @@ import {
 } from "../types";
 import produce from "immer";
 
-interface IProjectState {
+export interface IProjectState {
   projects: any[];
   project: any;
   loading: boolean;
@@ -19,10 +19,13 @@ const initialState: IProjectState = {
 };
 type Action = {
   type: string;
-  payload: any;
+  payload?: any;
 };
 
-export default function (state = initialState, action: Action) {
+export default function (
+  state: IProjectState = initialState,
+  action: Action
+): IProjectState {
   let index, nextState;
   switch (action.type) {
     case LOADING_PROJECT:

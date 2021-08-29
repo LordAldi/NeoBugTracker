@@ -17,7 +17,10 @@ const initialState = {
 };
 type Action = { type: string; payload?: any };
 
-export default function (state: IUIState = initialState, action: Action) {
+export default function (
+  state: IUIState = initialState,
+  action: Action
+): IUIState {
   switch (action.type) {
     case SET_ERRORS:
       return {

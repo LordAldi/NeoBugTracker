@@ -1,12 +1,11 @@
 import { Breadcrumbs, Grid, Link, Typography } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { useDispatch, connect } from "react-redux";
-import { getProject } from "../redux/actions/projectActions";
 
 const SingleProject = ({ match, project }: any) => {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getProject(match.params.id));
+    // dispatch(getProject(match.params.id));
   }, []);
   console.log(project);
 

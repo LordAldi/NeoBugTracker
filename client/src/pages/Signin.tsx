@@ -12,7 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Copyright from "../components/Copyright";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { loginUser, loginProps } from "../redux/actions/userActions";
 import { Formik, Form, Field } from "formik";
@@ -20,7 +20,8 @@ import { TextField } from "formik-material-ui";
 import * as Yup from "yup";
 import { LinearProgress } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import Cookies from "js-cookie";
+import { IRootState } from "../redux/store";
+import { IUIState } from "../redux/reducers/uiReducer";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -56,13 +57,11 @@ const SigninSchema = Yup.object().shape({
   password: Yup.string().min(8, "password too short"),
 });
 
-const Signin: React.FC<ISinginProps> = ({
-  user,
-  UI,
-  loginUser,
-}): JSX.Element => {
+const Signin: React.FC<ISinginProps> = (): JSX.Element => {
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
+  const UI: IUIState = useSelector((state: IRootState) => state.UI);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -84,9 +83,11 @@ const Signin: React.FC<ISinginProps> = ({
                 email,
                 password,
               };
-              loginUser(userData, () => {
-                history.push("/");
-              });
+              dispatch(
+                loginUser(userData, () => {
+                  history.push("/");
+                })
+              );
             } catch (error) {
               console.log(error);
             }
@@ -160,12 +161,4 @@ const Signin: React.FC<ISinginProps> = ({
   );
 };
 
-const mapStateToProps = (state: any) => ({
-  user: state.user,
-  UI: state.UI,
-});
-const mapActionsToProps = {
-  loginUser,
-};
-
-export default connect(mapStateToProps, mapActionsToProps)(Signin);
+export default Signin;

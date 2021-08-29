@@ -2,7 +2,6 @@ import { Box, Container, Grid, makeStyles, Paper } from "@material-ui/core";
 import React from "react";
 import clsx from "clsx";
 import Copyright from "../components/Copyright";
-import TableProject from "../components/table/project/TableProject";
 
 const useStyles = makeStyles((theme) => ({
   root: {

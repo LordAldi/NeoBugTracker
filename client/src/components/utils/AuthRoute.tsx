@@ -1,18 +1,20 @@
 import { Route, Redirect } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
+import { IRootState } from "../../redux/store";
 // import PropTypes from 'prop-types'
 
-const SecureRoute = ({ component: Component, authenticated, ...rest }: any) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      authenticated === true ? <Redirect to="/" /> : <Component {...props} />
-    }
-  />
-);
+const SecureRoute = ({ component: Component, ...rest }: any) => {
+  const authenticated: boolean = useSelector(
+    (state: IRootState) => state.User.authenticated
+  );
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        authenticated === true ? <Redirect to="/" /> : <Component {...props} />
+      }
+    />
+  );
+};
 
-const mapStateToProps = (state: any) => ({
-  authenticated: state.user.authenticated,
-});
-
-export default connect(mapStateToProps)(SecureRoute);
+export default SecureRoute;

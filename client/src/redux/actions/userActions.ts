@@ -10,51 +10,49 @@ import {
 } from "../types";
 import axios from "axios";
 
-export const loginUser = (userData: loginProps, redirect: Function) => (
-  dispatch: any
-) => {
-  dispatch({ type: LOADING_UI });
-  axios
-    .post("/api/users/signin", {
-      email: userData.email,
-      password: userData.password,
-    })
-    .then(async (res) => {
+export const loginUser =
+  (userData: loginProps, redirect: Function) => (dispatch: any) => {
+    dispatch({ type: LOADING_UI });
+    axios
+      .post("/api/users/signin", {
+        email: userData.email,
+        password: userData.password,
+      })
+      .then(async (res) => {
+        sessionStorage.setItem("email", userData.email);
+        await dispatch(getUserData());
+        dispatch({ type: CLEAR_ERRORS });
+        redirect();
+      })
+      .catch((err) => {
+        dispatch({
+          type: SET_ERRORS,
+          payload: err.response.data.errors,
+        });
+      });
+  };
+export const signupUser =
+  (userData: signupProps, redirect: Function) => async (dispatch: any) => {
+    dispatch({ type: LOADING_UI });
+    try {
+      const res = await axios.post("/api/users/signup", {
+        email: userData.email,
+        password: userData.password,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+      });
       sessionStorage.setItem("email", userData.email);
-      await dispatch(getUserData());
+
+      dispatch(await getUserData());
       dispatch({ type: CLEAR_ERRORS });
       redirect();
-    })
-    .catch((err) => {
+    } catch (error) {
       dispatch({
         type: SET_ERRORS,
-        payload: err.response.data.errors,
+        payload: error.response.data.errors,
       });
-    });
-};
-export const signupUser = (userData: signupProps, redirect: Function) => async (
-  dispatch: any
-) => {
-  dispatch({ type: LOADING_UI });
-  try {
-    const res = await axios.post("/api/users/signup", {
-      email: userData.email,
-      password: userData.password,
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-    });
-    sessionStorage.setItem("email", userData.email);
-
-    dispatch(await getUserData());
-    dispatch({ type: CLEAR_ERRORS });
-    redirect();
-  } catch (error) {
-    dispatch({
-      type: SET_ERRORS,
-      payload: error.response.data.errors,
-    });
-  }
-};
+    }
+  };
 
 export const logoutUser = () => (dispatch: any) => {
   axios.post("/api/users/signout").then((res) => {
@@ -64,6 +62,7 @@ export const logoutUser = () => (dispatch: any) => {
 };
 export const currentuser = () => async (dispatch: any) => {
   dispatch({ type: LOADING_UI });
+
   try {
     dispatch(await getUserData());
     dispatch({ type: CLEAR_ERRORS });
